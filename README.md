@@ -17,6 +17,7 @@
 
 # 💻 Requirements
 + [Have python installed](https://www.python.org/)
++ [Have autohotkey installed to run .ahk files](https://www.autohotkey.com/)
 + Windows 7 or above
 
 # 📖 Instructions
