@@ -47,4 +47,4 @@ PATH=build/ #The path where the .ahk files will be built (I recommend leaving it
 + With the option to run with Lyre, the Lyre interpreter will run and execute actions according to your configuration.
 > ![image](https://github.com/nothazu/Lyre/assets/153567247/e9b0a8ec-502b-4f9e-b6ec-1636a37c26fc)
 
-
++ If you want to learn how to create songs with this tool, you can read the [tutorial](https://github.com/nothazu/Lyre/blob/main/songs/Tutorial.md)
