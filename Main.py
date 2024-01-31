@@ -1,4 +1,4 @@
-import os, configparser, colorama
+import os, configparser, colorama, inquirer
 from src.Lyre import Lyre
 
 def read_config() -> dict:
@@ -8,21 +8,24 @@ def read_config() -> dict:
     return {
         "build_path": config.get("build", "PATH"),
         "start_key": config.get("input", "START_KEY"),
-        "end_key": config.get("input", "END_KEY")
+        "end_key": config.get("input", "END_KEY"),
+        "close_key": config.get("input", "CLOSE_KEY")
     }
 
-def process(path: str="Default") -> None:
-    if path is None: path = "Default"
-
-    song_path = "songs/" + path + ".txt"
-    print(colorama.Fore.YELLOW + "* " + colorama.Fore.LIGHTYELLOW_EX + "Building song in path \"{}\"".format(song_path) + colorama.Fore.RESET)
+def process(song: str, option: str) -> None:
+    song = song.replace(colorama.Fore.LIGHTCYAN_EX, "")
+    if song is None: song = "Default"
 
     lyre = Lyre(
         config=read_config(),
-        song_path=song_path
+        song_path="songs/" + song
     )
 
-    lyre.build_macro()
+    if option.startswith(colorama.Fore.LIGHTCYAN_EX + "Build"):
+        lyre.build_macro()
+
+    elif option.startswith(colorama.Fore.LIGHTCYAN_EX + "Run"):
+        lyre.execute_lyre()
 
 def init() -> None:
     os.system("cls")
@@ -36,10 +39,16 @@ def init() -> None:
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _        
           """ + colorama.Fore.RESET)
     
-    song = input(colorama.Fore.MAGENTA + "> " + colorama.Fore.LIGHTMAGENTA_EX +  "Song: " + colorama.Fore.MAGENTA)
-    process(path=song if len(song) > 0 else None)
+    option = inquirer.list_input(message=colorama.Fore.LIGHTMAGENTA_EX + "Choose an option" + colorama.Fore.MAGENTA, choices=[colorama.Fore.LIGHTCYAN_EX + "Build ahk file", colorama.Fore.LIGHTCYAN_EX + "Run with Lyre"], default="Build .ahk file")
 
-    if input(colorama.Fore.CYAN + "\n- " + colorama.Fore.LIGHTCYAN_EX + "Continue? (Y/N): " + colorama.Fore.CYAN).lower() == "y": init()
+    files = [colorama.Fore.LIGHTCYAN_EX + f for f in os.listdir("songs") if f != "Tutorial.md"]
+
+    if len(files) < 1: print(colorama.Fore.RED + "* " + colorama.Fore.LIGHTRED_EX + "There is no file in the songs path.")
+    
+    song = inquirer.list_input(message=colorama.Fore.LIGHTMAGENTA_EX + "Choose a song" + colorama.Fore.MAGENTA, choices=files, default=files[0])
+    process(song, option)
+
+    if input(colorama.Fore.GREEN + "\n- " + colorama.Fore.LIGHTGREEN_EX + "Continue? (Y/N): " + colorama.Fore.GREEN).lower() == "y": init()
 
 def main() -> None: init()
 

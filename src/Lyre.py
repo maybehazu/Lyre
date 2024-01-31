@@ -1,4 +1,34 @@
-import colorama
+import colorama, keyboard, time, threading, os
+
+def transform_clefs(sheet: str) -> None:
+    clefs = {
+        "((ti))": "a",
+        "((la))": "a",
+        "((so))": "a",
+        "((fa))": "a",
+        "((mi))": "a",
+        "((re))": "a",
+        "((do))": "a",
+        "(ti)": "a",
+        "(la)": "a",
+        "(so)": "a",
+        "(fa)": "a",
+        "(mi)": "a",
+        "(re)": "a",
+        "(do)": "a",
+        "ti": "a",
+        "la": "a",
+        "so": "a",
+        "fa": "a",
+        "mi": "a",
+        "re": "a",
+        "do": "a",
+    }
+
+    for key, value in clefs.items():
+        sheet = sheet.replace(key, value)
+    
+    return sheet
 
 class Lyre:
     def __init__(self, config: dict, song_path: str="songs/Default.txt") -> None:
@@ -6,30 +36,6 @@ class Lyre:
         self.config = config
         self.segments = []
         self.info = []
-
-        clefs = {
-            "((ti))": "a",
-            "((la))": "a",
-            "((so))": "a",
-            "((fa))": "a",
-            "((mi))": "a",
-            "((re))": "a",
-            "((do))": "a",
-            "(ti)": "a",
-            "(la)": "a",
-            "(so)": "a",
-            "(fa)": "a",
-            "(mi)": "a",
-            "(re)": "a",
-            "(do)": "a",
-            "ti": "a",
-            "la": "a",
-            "so": "a",
-            "fa": "a",
-            "mi": "a",
-            "re": "a",
-            "do": "a",
-        }
 
         try: 
             with open(self.path, "r") as file:
@@ -40,9 +46,7 @@ class Lyre:
                 self.interval = float(info.split("Interval: ")[1])
                 self.type = int(info.split("Type: ")[1].split("Title:")[0])
 
-                if self.type == 2:
-                    for key, value in clefs.items():
-                        content[1] = content[1].replace(key, value)
+                if self.type == 2: content[1] = transform_clefs(content[1])
                 
                 segments = content[1].replace(" ", "").split("\n")
             
@@ -64,6 +68,7 @@ class Lyre:
     
     def build_macro(self) -> None:
         try:
+            print(colorama.Fore.YELLOW + "* " + colorama.Fore.LIGHTYELLOW_EX + "Building song in path \"{}\"".format(self.path) + colorama.Fore.RESET)
             instructions = []
 
             for segment in self.segments:
@@ -95,3 +100,58 @@ class Lyre:
         
         except Exception as err:
             print(colorama.Fore.RED + "- " + colorama.Fore.LIGHTRED_EX + "There was an error trying to process the song: {}".format(err) + colorama.Fore.RESET)
+    
+    def execute_lyre(self) -> None:
+        try:
+            os.system("cls")
+
+            print(colorama.Fore.CYAN + "+ " + colorama.Fore.LIGHTCYAN_EX + "Running Lyre...\n" + colorama.Fore.YELLOW + "* " + colorama.Fore.LIGHTYELLOW_EX + "{}: start".format(self.config["start_key"]) + colorama.Fore.YELLOW + "\n* " + colorama.Fore.LIGHTYELLOW_EX + "{}: stop\n".format(self.config["end_key"]) + colorama.Fore.YELLOW + "* " + colorama.Fore.LIGHTYELLOW_EX + "{}: close".format(self.config["close_key"]))
+
+            isRunning = True
+            canPlay = False
+
+            instructions = []
+
+            for segment in self.segments:
+                [keybind, duration] = segment.split(":")
+
+                for key in keybind:
+                    instructions.append("press:" + key)
+                
+                instructions.append("wait:" + str(duration))
+
+            def process_instructions() -> None:
+                for instruction in instructions:
+                    if not canPlay: break
+
+                    if instruction.startswith("press"):
+                        keyboard.press(instruction.split(":")[1])
+                    
+                    elif instruction.startswith("wait"):
+                        wait_time = float(instruction.split(":")[1]) / 1000
+                        time.sleep(wait_time)
+
+            def on_key_event(e) -> None:
+                nonlocal isRunning
+                nonlocal canPlay
+
+                if e.event_type == keyboard.KEY_UP:
+                    if e.name == self.config["start_key"].lower():
+                        canPlay = True
+
+                        action_thread = threading.Thread(target=process_instructions)
+                        action_thread.start()
+
+                    elif e.name == self.config["end_key"].lower(): canPlay = False
+                    elif e.name == self.config["close_key"].lower(): isRunning = False
+
+            keyboard.hook(on_key_event)
+
+            while isRunning:
+                pass
+
+        except Exception as err:
+            raise err
+        
+        finally:
+            keyboard.unhook_all()
