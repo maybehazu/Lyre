@@ -1,4 +1,4 @@
-![image](https://github.com/nothazu/Lyre/assets/153567247/e56b5573-c07c-4f6d-8f2d-3f9250b7aa4a)# 🎹 Lyre - Genshin Impact
+# 🎹 Lyre - Genshin Impact
 
 <img src="https://github.com/nothazu/Lyre/assets/153567247/a5006f90-a6f2-488c-84b9-8c9073929a97" alt="Windsong lyre from genshin impact" align="right">
 
