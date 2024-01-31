@@ -155,7 +155,7 @@ class Lyre:
                 pass
 
         except Exception as err:
-            raise err
+            print(colorama.Fore.RED + "- " + colorama.Fore.LIGHTRED_EX + "There was an error trying to process the song: {}".format(err) + colorama.Fore.RESET)
         
         finally:
             keyboard.unhook_all()
