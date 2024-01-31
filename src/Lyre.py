@@ -121,14 +121,18 @@ class Lyre:
                 instructions.append("wait:" + str(duration))
 
             def process_instructions() -> None:
+                nonlocal canPlay
+
                 for instruction in instructions:
                     if not canPlay: break
 
                     if instruction.startswith("press"):
-                        keyboard.press(instruction.split(":")[1])
+                        thread = threading.Thread(target=lambda x: keyboard.send(x), args=(instruction.split(":")[1].lower(),))
+                        thread.start()
+                        #keyboard.send(instruction.split(":")[1].lower())
                     
                     elif instruction.startswith("wait"):
-                        wait_time = float(instruction.split(":")[1]) / 1000
+                        wait_time = float(instruction.split(":")[1]) / 1050
                         time.sleep(wait_time)
 
             def on_key_event(e) -> None:
@@ -143,7 +147,7 @@ class Lyre:
                         action_thread.start()
 
                     elif e.name == self.config["end_key"].lower(): canPlay = False
-                    elif e.name == self.config["close_key"].lower(): isRunning = False
+                    elif e.name == self.config["close_key"].lower(): isRunning = False; canPlay = False
 
             keyboard.hook(on_key_event)
 

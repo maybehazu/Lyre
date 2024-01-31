@@ -1,3 +1,5 @@
 colorama
 inquirer
 keyboard
+pypiwin32
+pyuac

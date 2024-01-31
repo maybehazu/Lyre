@@ -1,4 +1,5 @@
 import os, configparser, colorama, inquirer
+from pyuac import main_requires_admin
 from src.Lyre import Lyre
 
 def read_config() -> dict:
@@ -27,6 +28,7 @@ def process(song: str, option: str) -> None:
     elif option.startswith(colorama.Fore.LIGHTCYAN_EX + "Run"):
         lyre.execute_lyre()
 
+@main_requires_admin
 def init() -> None:
     os.system("cls")
 
@@ -41,7 +43,7 @@ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
     
     option = inquirer.list_input(message=colorama.Fore.LIGHTMAGENTA_EX + "Choose an option" + colorama.Fore.MAGENTA, choices=[colorama.Fore.LIGHTCYAN_EX + "Build ahk file", colorama.Fore.LIGHTCYAN_EX + "Run with Lyre"], default="Build .ahk file")
 
-    files = [colorama.Fore.LIGHTCYAN_EX + f for f in os.listdir("songs") if f != "Tutorial.md"]
+    files = [colorama.Fore.LIGHTCYAN_EX + f for f in os.listdir("songs") if f.split(".")[1] == "wsl"]
 
     if len(files) < 1: print(colorama.Fore.RED + "* " + colorama.Fore.LIGHTRED_EX + "There is no file in the songs path.")
     
