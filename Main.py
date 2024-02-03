@@ -41,6 +41,8 @@ def init() -> None:
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _        
           """ + colorama.Fore.RESET)
     
+    print(colorama.Fore.MAGENTA + "* " + colorama.Fore.LIGHTMAGENTA_EX + "Lyre is a tool developed by Hazu to interpret and build macros for the Windsong Lyre from Genshin Impact.\n")
+    
     option = inquirer.list_input(message=colorama.Fore.LIGHTMAGENTA_EX + "Choose an option" + colorama.Fore.MAGENTA, choices=[colorama.Fore.LIGHTCYAN_EX + "Build ahk file", colorama.Fore.LIGHTCYAN_EX + "Run with Lyre"], default="Build .ahk file")
 
     files = [colorama.Fore.LIGHTCYAN_EX + f for f in os.listdir("songs") if f.split(".")[1] == "wsl"]

@@ -2,27 +2,27 @@ import colorama, keyboard, time, threading, os
 
 def transform_clefs(sheet: str) -> None:
     clefs = {
-        "((ti))": "a",
-        "((la))": "a",
-        "((so))": "a",
-        "((fa))": "a",
-        "((mi))": "a",
-        "((re))": "a",
-        "((do))": "a",
-        "(ti)": "a",
-        "(la)": "a",
-        "(so)": "a",
-        "(fa)": "a",
-        "(mi)": "a",
-        "(re)": "a",
+        "((ti))": "u",
+        "((la))": "y",
+        "((so))": "t",
+        "((fa))": "r",
+        "((mi))": "e",
+        "((re))": "w",
+        "((do))": "q",
+        "(ti)": "j",
+        "(la)": "h",
+        "(so)": "g",
+        "(fa)": "f",
+        "(mi)": "d",
+        "(re)": "s",
         "(do)": "a",
-        "ti": "a",
-        "la": "a",
-        "so": "a",
-        "fa": "a",
-        "mi": "a",
-        "re": "a",
-        "do": "a",
+        "ti": "m",
+        "la": "n",
+        "so": "b",
+        "fa": "v",
+        "mi": "c",
+        "re": "x",
+        "do": "z",
     }
 
     for key, value in clefs.items():
@@ -155,7 +155,7 @@ class Lyre:
                 pass
 
         except Exception as err:
-            raise err
+            print(colorama.Fore.RED + "- " + colorama.Fore.LIGHTRED_EX + "There was an error trying to process the song: {}".format(err) + colorama.Fore.RESET)
         
         finally:
             keyboard.unhook_all()
