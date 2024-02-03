@@ -18,3 +18,5 @@ fa......... -> Now, assuming the "Type" property is "2", this instruction will c
 (fa).... -> Now, assuming the "Type" property is "2", this instruction will cause you to press "fa" in the key of C and then take a 9-point break.
 ((fa)).... -> Now, assuming the "Type" property is "2", this instruction will cause you to press "fa" in treble clef and then take a 9-point break.
 ```
+
++ Here is an [example](https://github.com/nothazu/Lyre/blob/main/songs/Default.wsl) of a wsl file.
